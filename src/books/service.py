@@ -3,7 +3,7 @@ from . import models, schemas
 
 
 async def get_by_id(db: Session, book_id: int):
-    return next(db).query(models.Book).filter(models.Book.id == book_id).first()
+    return next(db).query(models.Book).get(book_id)
 
 
 async def get_all(db: Session):
@@ -21,7 +21,17 @@ async def create_book(db: Session, book: schemas.BookCreate):
 
 async def delete(db: Session, book_id: int):
     db = next(db)
-    db_book = db.query(models.Book).filter(models.Book.id == book_id).first()
+    db_book = db.query(models.Book).get(book_id)
     db.delete(db_book)
     db.commit()
     return db_book
+
+
+async def update_book(db: Session, book_id: int, book: schemas.BookUpdate):
+    db = next(db)
+    db.query(models.Book).filter(
+        models.Book.id == book_id).update(values=dict(book))
+    db.commit()
+    updated_book = db.query(models.Book).filter(
+        models.Book.id == book_id).first()
+    return updated_book

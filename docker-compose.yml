@@ -11,7 +11,7 @@ services:
       - "5432:5432"
 
   backend:
-    command: ["cd", "alembic", "alembic", "upgrade", "head"]
+    command: ["sh", "-c", "cd alembic && alembic upgrade head"]
     build:
       context: .
       dockerfile: Dockerfile
