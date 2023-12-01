@@ -19,15 +19,14 @@ async def create_book(db: Session, book: schemas.BookCreate):
     return db_book
 
 
-async def delete(db: Session, book_id: int):
+async def delete(db: Session, book: models.Book):
     db = next(db)
-    db_book = db.query(models.Book).get(book_id)
-    db.delete(db_book)
+    db.delete(book)
     db.commit()
-    return db_book
+    return book
 
 
-async def update_book(db: Session, book_id: int, book: schemas.BookUpdate):
+async def update_book(db: Session, book_id: int, book: models.Book):
     db = next(db)
     db.query(models.Book).filter(
         models.Book.id == book_id).update(values=dict(book))

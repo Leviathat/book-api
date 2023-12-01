@@ -10,7 +10,7 @@ async def get_all():
     return await service.get_all(session)
 
 
-async def valid_book_id(book_id: int):
+async def valid_book_id(book_id: int) -> models.Book:
     session = get_session()
     book = await service.get_by_id(session, book_id)
     if not book:
@@ -18,14 +18,14 @@ async def valid_book_id(book_id: int):
     return book
 
 
-async def delete_by_id(book_id: int):
-    session = get_session()
-    return await service.delete(session, book_id)
-
-
 async def valid_book(book: schemas.BookCreate) -> models.Book:
     session = get_session()
     return await service.create_book(session, book)
+
+
+async def delete_by_id(book: models.Book = Depends(valid_book_id)):
+    session = get_session()
+    return await service.delete(session, book)
 
 
 async def valid_update_book(book_id: int, book: schemas.BookUpdate):
