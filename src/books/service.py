@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 from . import models, schemas
+from sqlalchemy.exc import DatabaseError, NoResultFound
 
 
 async def get_by_id(db: Session, book_id: int):
@@ -26,11 +27,13 @@ async def delete(db: Session, book: models.Book):
     return book
 
 
-async def update_book(db: Session, book_id: int, book: models.Book):
+async def update_book(db: Session, book_id: int, book: schemas.BookUpdate):
     db = next(db)
-    db.query(models.Book).filter(
-        models.Book.id == book_id).update(values=dict(book))
-    db.commit()
-    updated_book = db.query(models.Book).filter(
-        models.Book.id == book_id).first()
-    return updated_book
+    try:
+        db.query(models.Book).filter(
+            models.Book.id == book_id).update(values=dict(book))
+        db.commit()
+        return db.query(models.Book).filter(
+            models.Book.id == book_id).first()
+    except NoResultFound:
+        return

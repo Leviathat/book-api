@@ -1,8 +1,6 @@
-from typing import Mapping, Annotated
-from fastapi import HTTPException
 from src.database import get_session
 from . import models, schemas, service
-from fastapi import Depends
+from fastapi import Depends, HTTPException
 
 
 async def get_all():
@@ -30,4 +28,7 @@ async def delete_by_id(book: models.Book = Depends(valid_book_id)):
 
 async def valid_update_book(book_id: int, book: schemas.BookUpdate):
     session = get_session()
-    return await service.update_book(session, book_id, book)
+    book = await service.update_book(session, book_id, book)
+    if not book:
+        raise HTTPException(status_code=404, detail="No book found")
+    return book
