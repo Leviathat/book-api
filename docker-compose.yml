@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  db:
+  psql:
     image: postgres:13-alpine
     env_file:
       - ./.env
@@ -10,7 +10,7 @@ services:
     ports:
       - "5432:5432"
 
-  backend:
+  app:
     command: ["sh", "-c", "cd alembic && alembic upgrade head"]
     build:
       context: .
@@ -18,7 +18,7 @@ services:
     ports:
       - "8000:80"
     depends_on:
-      - db
+      - psql
     working_dir: /code/
 
 volumes:
