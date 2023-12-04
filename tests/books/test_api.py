@@ -1,5 +1,7 @@
+import json
 import requests
 import pytest
+from datetime import datetime
 
 
 def pytest_namespace():
@@ -23,6 +25,10 @@ def test_add_book():
 
 def test_get_single():
     response = requests.get(f"http://127.0.0.1:8000/books/{pytest.last_id}")
+
+    with open(f'test_get_single-{datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}.txt', 'w') as f:
+        json.dump(response.json(), f)
+
     assert response.status_code == 200
 
 

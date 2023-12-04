@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  psql:
+  db:
     image: postgres:13-alpine
     env_file:
       - ./.env
@@ -18,7 +18,7 @@ services:
     ports:
       - "8000:80"
     depends_on:
-      - psql
+      - db
     working_dir: /code/
 
 volumes:
