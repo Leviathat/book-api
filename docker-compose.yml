@@ -1,5 +1,8 @@
 version: "3"
 
+volumes:
+  postgres-data:
+
 services:
   db:
     image: postgres:13-alpine
@@ -11,7 +14,6 @@ services:
       - "5432:5432"
 
   app:
-    command: ["sh", "-c", "cd alembic && alembic upgrade head"]
     build:
       context: .
       dockerfile: Dockerfile
@@ -20,6 +22,3 @@ services:
     depends_on:
       - db
     working_dir: /code/
-
-volumes:
-  postgres-data:

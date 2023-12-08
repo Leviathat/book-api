@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-
+from sqlalchemy.exc import OperationalError
 
 SQLALCHEMY_DATABASE_URL = "postgresql://shop_admin:488719@db:5432/shop_db"
 
@@ -15,6 +15,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
 # Dependency
+
 def get_session():
     session = SessionLocal()
     try:
